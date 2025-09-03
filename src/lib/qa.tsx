@@ -3,7 +3,7 @@ export interface qa {
     content: string,
     type: "single_select" | "multi_select",
     options: option[],
-    total_content: number,
+    total_count: number,
     correct_count: number
 }
 
