@@ -100,7 +100,7 @@ const QABox: React.FC<QABoxProps> = ({ qas }) => {
                 {currentQA.id + `. ` + currentQA.content}
             </p>
             <div id='answer' className='grid place-items-center grid-cols-2 h-2/5 text-lg'>
-                {currentQA.options.map((option) => (
+                {currentQA.options && currentQA.options.map((option) => (
                     <OptionBox
                         key={option.order}
                         option={option}
@@ -121,15 +121,15 @@ const QABox: React.FC<QABoxProps> = ({ qas }) => {
                     </p>
                 </div>
             )}
-            <div className="flex gap-4 mt-6">
+            <div className="flex flex-row gap-15 justify-center">
                 <button
-                    className="px-4 py-2 bg-blue-500 text-white rounded"
+                    className=" basis-1/5  py-1.5  bg-blue-400 text-white rounded"
                     onClick={handleConfirm}
                 >
                     确认
                 </button>
                 <button
-                    className="px-4 py-2 bg-green-500 text-white rounded"
+                    className="basis-1/5 py-1.5 bg-gray-700 text-white rounded"
                     onClick={handleNext}
                 >
                     下一题

@@ -5,11 +5,11 @@ interface StatisticsProps {
 }
 
 const Statistics: React.FC<StatisticsProps> = ({ qas }) => {
-    const sortedQAS = qas.sort((a, b) => a.total_content - b.correct_count)
+    // let sortedQAS = qas.sort((a, b) => a.total_content - b.total_content)
 
     return (
         <div className='w-full h-full'>
-            {sortedQAS.map((qa) => {
+            {typeof qas === typeof Array && qas.map((qa) => {
                 return (
                     <ul>
                         {qa.id}
