@@ -14,7 +14,7 @@ interface group {
 const App: React.FC = () => {
   const [press, setPress] = useState<boolean>(false)
   const [qas, setQAs] = useState<qa[] | null>(null)
-  const [group, setGroup] = useState<group[] | null>(null)
+  const [_, setGroup] = useState<group[] | null>(null)
 
   useEffect(() => {
     const fetchGroups = async () => {
