@@ -6,6 +6,8 @@ interface QABoxProps {
     qas: qa[]
 }
 
+const numToLetter = ['A', 'B', 'C', 'D']
+
 const OptionBox: React.FC<{
     option: option
     type: "single_select" | "multi_select"
@@ -35,10 +37,10 @@ const OptionBox: React.FC<{
                 className="hidden peer"
             />
             <div
-                className="flex items-center justify-center w-full h-full rounded-4xl border-5 border-white 
-                    bg-foreground peer-checked:bg-[#ffed85] cursor-pointer"
+                className="p-3 flex items-center justify-center w-full h-full  border-5 border-gray-400
+                    bg-foreground peer-checked:bg-[#ffdc6b] peer-checked:text-black cursor-pointer text-lg"
             >
-                {option.content}
+                {numToLetter[option.order] + "、"}{option.content}
             </div>
         </label>
     )
@@ -72,10 +74,10 @@ const QABox: React.FC<QABoxProps> = ({ qas }) => {
     const handleNext = async () => {
         if (result !== null) {
             try {
-                const res = await axios.get("/api/v1", {
+                const res = await axios.get("http://localhost:8000/api/v1/sheet/report", {
                     params: {
-                        id: index,
-                        result: result
+                        problem_id: currentQA.id,
+                        correct: result
                     }
                 })
                 if (res.status !== 200) {
@@ -92,14 +94,17 @@ const QABox: React.FC<QABoxProps> = ({ qas }) => {
         setResult(null)
     }
 
-
+    const basicCss = 'grid place-items-center grid-cols-2 '
 
     return (
-        <div className='w-full h-full'>
-            <p id='question' className='text-xl h-2/5 mt-5 mx-3'>
-                {currentQA.id + `. ` + currentQA.content}
+        <div className='w-full h-full relative bg-orange-50'>
+            <p id="type" className='text-xl h-fit  text-black opacity-30'>
+                {currentQA.type === "multi_select" ? "（多选题）" : "（单选题）"}
             </p>
-            <div id='answer' className='grid place-items-center grid-cols-2 h-2/5 text-lg'>
+            <p id='question' className='text-2xl h-4/15 mt-6 mx-10 text-black '>
+                {currentQA.content}
+            </p>
+            <div id='answer' className={currentQA.options.length > 2 ? basicCss + " h-3/10" : basicCss + " h-3/20"}>
                 {currentQA.options && currentQA.options.map((option) => (
                     <OptionBox
                         key={option.order}
@@ -111,25 +116,26 @@ const QABox: React.FC<QABoxProps> = ({ qas }) => {
                 ))}
             </div>
             {showCorrect && (
-                <div className="mt-4 p-2">
-                    <p className="font-bold">
+                <div className="mt-4 p-2 mx-9 ">
+                    <p className="font-bold text-black border-b-1">
                         正确答案：
                         {currentQA.options
                             .filter((o) => o.is_correct)
-                            .map((o) => o.content)
-                            .join("，")}
+                            .map((o) => numToLetter[o.order] + "、" + o.content)
+                            .join("；")}
                     </p>
                 </div>
             )}
-            <div className="flex flex-row gap-15 justify-center">
+
+            <div className="w-full absolute bottom-8 grid grid-cols-7 ">
                 <button
-                    className=" basis-1/5  py-1.5  bg-blue-400 text-white rounded"
+                    className="col-start-2 col-end-4 basis-1/5  py-3 mx-12 bg-blue-400 text-white rounded-4xl"
                     onClick={handleConfirm}
                 >
                     确认
                 </button>
                 <button
-                    className="basis-1/5 py-1.5 bg-gray-700 text-white rounded"
+                    className="col-start-5 col-end-7 basis-1/5 py-3 mx-12 bg-gray-700 text-white rounded-4xl"
                     onClick={handleNext}
                 >
                     下一题

@@ -5,17 +5,19 @@ interface StatisticsProps {
 }
 
 const Statistics: React.FC<StatisticsProps> = ({ qas }) => {
-    // let sortedQAS = qas.sort((a, b) => a.total_content - b.total_content)
-
+    let lessQAS = qas.filter(qa => qa.total_content === 0)
+    console.log(lessQAS.length, " ", qas.length)
+    const sortedQAS = qas.sort((a, b) => a.total_content - b.total_content)
     return (
-        <div className='w-full h-full'>
-            {typeof qas === typeof Array && qas.map((qa) => {
+        <div className='w-full h-full px-2 text-sm text-black'>
+            {sortedQAS.map((qa, index) => {
                 return (
-                    <ul>
-                        {qa.id}
-                        {qa.content}
-                        正确率：
-                        {qa.correct_count / qa.total_content}
+                    <ul key={qa.id} className="border-b-1 my-2 pb-6 relative ">
+                        <div>{(index + 1 + "、") + qa.content}</div>
+                        <div className="my-1 absolute right-1 bottom-0 ">
+
+                            {qa.correct_count + "/" + qa.total_content}
+                        </div>
                     </ul>
                 )
             })}
