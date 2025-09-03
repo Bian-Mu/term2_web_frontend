@@ -1,20 +1,22 @@
-import { useState } from "react"
-import type { qa } from "../qa"
+import type { qa } from "../lib/qa"
 
 interface StatisticsProps {
     qas: qa[]
 }
 
 const Statistics: React.FC<StatisticsProps> = ({ qas }) => {
-
+    const sortedQAS = qas.sort((a, b) => a.total_content - b.correct_count)
 
     return (
         <div className='w-full h-full'>
-            {qas.map((qa, index) => {
+            {sortedQAS.map((qa) => {
                 return (
-                    <div>
-
-                    </div>
+                    <ul>
+                        {qa.id}
+                        {qa.content}
+                        正确率：
+                        {qa.correct_count / qa.total_content}
+                    </ul>
                 )
             })}
         </div>
