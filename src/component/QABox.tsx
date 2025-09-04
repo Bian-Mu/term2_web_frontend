@@ -37,10 +37,10 @@ const OptionBox: React.FC<{
                 className="hidden peer"
             />
             <div
-                className="p-3 flex items-center justify-center w-full h-full  border-5 border-gray-400
-                    bg-foreground peer-checked:bg-[#ffdc6b] peer-checked:text-black cursor-pointer text-lg"
+                className="p-3 flex items-center justify-center w-full h-full  border-5 border-white rounded-xl
+                    bg-[#ffdaaf] hover:bg-[#ffb36b] peer-checked:bg-[#ffb36b] text-black cursor-pointer text-lg"
             >
-                {numToLetter[option.order] + "、"}{option.content}
+                {numToLetter[option.order] + ". "}{option.content}
             </div>
         </label>
     )
@@ -57,9 +57,9 @@ const QABox: React.FC<QABoxProps> = ({ qas }) => {
 
 
     const currentQA = qas[index]
-
+    // console.log(length, index, qas)
     const handleConfirm = () => {
-        const correctOptions = currentQA.options
+        const correctOptions = currentQA?.options
             .filter((o) => o.is_correct)
             .map((o) => o.order)
 
@@ -74,7 +74,7 @@ const QABox: React.FC<QABoxProps> = ({ qas }) => {
     const handleNext = async () => {
         if (result !== null) {
             try {
-                const res = await axios.get("http://localhost:8000/api/v1/sheet/report", {
+                const res = await axios.get("http://127.0.0.1:8000/api/v1/sheet/report", {
                     params: {
                         problem_id: currentQA.id,
                         correct: result
@@ -98,13 +98,13 @@ const QABox: React.FC<QABoxProps> = ({ qas }) => {
 
     return (
         <div className='w-full h-full relative bg-orange-50'>
-            <p id="type" className='text-xl h-fit  text-black opacity-30'>
+            <div id="type" className='rounded-lg bg-amber-400 text-xl h-fit w-fit text-black opacity-60'>
                 {currentQA.type === "multi_select" ? "（多选题）" : "（单选题）"}
-            </p>
+            </div>
             <p id='question' className='text-2xl h-4/15 mt-6 mx-10 text-black '>
                 {currentQA.content}
             </p>
-            <div id='answer' className={currentQA.options.length > 2 ? basicCss + " h-3/10" : basicCss + " h-3/20"}>
+            <div id='answer' className={currentQA.options?.length > 2 ? basicCss + " h-3/10" : basicCss + " h-3/20"}>
                 {currentQA.options && currentQA.options.map((option) => (
                     <OptionBox
                         key={option.order}
@@ -121,7 +121,7 @@ const QABox: React.FC<QABoxProps> = ({ qas }) => {
                         正确答案：
                         {currentQA.options
                             .filter((o) => o.is_correct)
-                            .map((o) => numToLetter[o.order] + "、" + o.content)
+                            .map((o) => numToLetter[o.order] + ". " + o.content)
                             .join("；")}
                     </p>
                 </div>
@@ -129,13 +129,13 @@ const QABox: React.FC<QABoxProps> = ({ qas }) => {
 
             <div className="w-full absolute bottom-8 grid grid-cols-7 ">
                 <button
-                    className="col-start-2 col-end-4 basis-1/5  py-3 mx-12 bg-blue-400 text-white rounded-4xl"
+                    className=" hover:bg-blue-500 col-start-2 col-end-4 basis-1/5  py-3 mx-12 bg-blue-400 text-white rounded-4xl"
                     onClick={handleConfirm}
                 >
                     确认
                 </button>
                 <button
-                    className="col-start-5 col-end-7 basis-1/5 py-3 mx-12 bg-gray-700 text-white rounded-4xl"
+                    className="hover:bg-gray-800 col-start-5 col-end-7 basis-1/5 py-3 mx-12 bg-gray-700 text-white rounded-4xl"
                     onClick={handleNext}
                 >
                     下一题
