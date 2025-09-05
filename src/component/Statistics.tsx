@@ -4,7 +4,9 @@ interface StatisticsProps {
     qas: qa[]
 }
 
+//统计答题情况的组件
 const Statistics: React.FC<StatisticsProps> = ({ qas }) => {
+    //筛选并排序
     let lessQAS = qas.filter(qa => qa.total_count !== 0)
     const sortedQAS = lessQAS.sort((a, b) => b.total_count - a.total_count)
     return (

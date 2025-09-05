@@ -6,14 +6,17 @@ interface QABoxProps {
     qas: qa[]
 }
 
+//映射题目每个选项的编号
 const numToLetter = ['A', 'B', 'C', 'D']
 
+//用于设置选项的组件
 const OptionBox: React.FC<{
     option: option
     type: "single_select" | "multi_select"
     selected: number[]
     setSelected: (val: number[]) => void
 }> = ({ option, type, selected, setSelected }) => {
+    //分别为多选题和单选题设置选择逻辑
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (type === "multi_select") {
             if (e.target.checked) {
@@ -46,6 +49,7 @@ const OptionBox: React.FC<{
     )
 }
 
+//答题区域，在接收后端题库后形成题列
 const QABox: React.FC<QABoxProps> = ({ qas }) => {
     const length = qas.length
     const [index, setIndex] = useState<number>(
@@ -57,7 +61,7 @@ const QABox: React.FC<QABoxProps> = ({ qas }) => {
 
 
     const currentQA = qas[index]
-    // console.log(length, index, qas)
+    //由前端根据选项判断做题结果
     const handleConfirm = () => {
         const correctOptions = currentQA?.options
             .filter((o) => o.is_correct)
@@ -71,6 +75,7 @@ const QABox: React.FC<QABoxProps> = ({ qas }) => {
         setShowCorrect(true)
     }
 
+    //将结果发给后端并写入数据库，同时切至下一题
     const handleNext = async () => {
         if (result !== null) {
             try {
@@ -115,6 +120,7 @@ const QABox: React.FC<QABoxProps> = ({ qas }) => {
                     />
                 ))}
             </div>
+            {/* 展示正确答案 */}
             {showCorrect && (
                 <div className="mt-4 p-2 mx-9 ">
                     <p className="font-bold text-black border-b-1">
